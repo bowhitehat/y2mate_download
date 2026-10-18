@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y2Downloader - Tải Video & Nhạc MP3 YouTube Miễn Phí</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="theme-dark">
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand" id="brandLogo">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Y2<span class="brand-highlight">Downloader</span></span>
+                    <span class="brand-tag">Tương tự Y2Mate • Tốc độ cao</span>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-btn" id="btnOpenFolder" title="Mở thư mục chứa file đã tải trên máy">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <span>Thư mục Tải về</span>
+                </button>
+                <button class="nav-btn" id="btnToggleHistory" title="Xem danh sách file đã tải">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Lịch sử</span>
+                    <span class="history-badge" id="historyCount">0</span>
+                </button>
+                <button class="nav-btn theme-toggle" id="btnThemeToggle" title="Đổi giao diện Sáng / Tối">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Tải Video & Nhạc MP3 từ YouTube</h1>
+            <p class="hero-subtitle">Hỗ trợ tải định dạng MP4 độ nét cao 1080p/2K/4K và trích xuất âm thanh MP3 320kbps siêu chuẩn</p>
+
+            <!-- Search / URL Box -->
+            <div class="search-box-wrapper">
+                <div class="search-box" id="searchBoxContainer">
+                    <div class="input-icon">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="urlInput" 
+                        placeholder="Dán link YouTube (vd: https://www.youtube.com/watch?v=...) hoặc gõ tên bài hát..." 
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button class="input-btn btn-paste" id="btnPaste" title="Dán liên kết từ bộ nhớ tạm">
+                        <i class="fa-regular fa-clipboard"></i>
+                        <span>Dán</span>
+                    </button>
+                    <button class="input-btn btn-clear hidden" id="btnClear" title="Xóa nội dung">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <button class="btn-start" id="btnStart">
+                        <span class="btn-text">Bắt đầu</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span class="spinner hidden" id="btnSpinner"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feature Badges -->
+            <div class="feature-badges">
+                <div class="badge-item">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                    <span>Tải nhanh không giới hạn</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-music"></i>
+                    <span>MP3 320kbps cực nét</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-film"></i>
+                    <span>MP4 1080p Full HD / 4K</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>100% Miễn phí & Không quảng cáo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading State Indicator -->
+        <section class="loading-state hidden" id="loadingState">
+            <div class="spinner-large"></div>
+            <p class="loading-text" id="loadingText">Đang phân tích định dạng và dữ liệu YouTube...</p>
+        </section>
+
+        <!-- Search Results Grid (when user searches by keyword) -->
+        <section class="search-results-section hidden" id="searchResultsSection">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-magnifying-glass"></i> Kết quả tìm kiếm cho: <span id="searchQueryTerm" class="term-highlight"></span></h2>
+                <button class="btn-back-search" id="btnCloseSearchResults"><i class="fa-solid fa-xmark"></i> Đóng</button>
+            </div>
+            <div class="results-grid" id="resultsGrid">
+                <!-- Search items dynamically injected here -->
+            </div>
+        </section>
+
+        <!-- Video Info & Download Options Card -->
+        <section class="video-info-section hidden" id="videoInfoSection">
+            <div class="video-card">
+                <!-- Video Left Preview -->
+                <div class="video-preview-col">
+                    <div class="thumbnail-container">
+                        <img id="videoThumb" src="" alt="Thumbnail video">
+                        <span class="duration-badge" id="videoDuration">00:00</span>
+                    </div>
+                    <div class="video-meta-tags">
+                        <div class="meta-item">
+                            <i class="fa-regular fa-user"></i>
+                            <span id="videoUploader">Kênh</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fa-regular fa-eye"></i>
+                            <span id="videoViews">0 lượt xem</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fa-regular fa-calendar"></i>
+                            <span id="videoDate">N/A</span>
+                        </div>
+                    </div>
+                    <a id="videoOriginalLink" href="#" target="_blank" rel="noopener noreferrer" class="link-youtube-original">
+                        <i class="fa-brands fa-youtube"></i> Xem trực tiếp trên YouTube
+                    </a>
+                </div>
+
+                <!-- Video Right Options (Tabs) -->
+                <div class="video-options-col">
+                    <h2 class="video-title" id="videoTitle">Tiêu đề video</h2>
+
+                    <!-- Tabs Switcher -->
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="tabVideo">
+                            <i class="fa-solid fa-video"></i>
+                            <span>Video (MP4)</span>
+                        </button>
+                        <button class="tab-btn" data-tab="tabAudio">
+                            <i class="fa-solid fa-music"></i>
+                            <span>Âm thanh (MP3)</span>
+                        </button>
+                        <button class="tab-btn" data-tab="tabOriginalAudio">
+                            <i class="fa-solid fa-headphones"></i>
+                            <span>Audio Gốc (M4A)</span>
+                        </button>
+                    </div>
+
+                    <!-- Tab Panels -->
+                    <div class="tab-content">
+                        <!-- Panel: Video (MP4) -->
+                        <div class="tab-panel active" id="tabVideo">
+                            <div class="table-responsive">
+                                <table class="options-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Độ phân giải</th>
+                                            <th>Định dạng</th>
+                                            <th>Dung lượng</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="videoFormatRows">
+                                        <!-- Dynamically generated rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Audio (MP3) -->
+                        <div class="tab-panel" id="tabAudio">
+                            <div class="table-responsive">
+                                <table class="options-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Chất lượng MP3</th>
+                                            <th>Định dạng</th>
+                                            <th>Dung lượng</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="audioFormatRows">
+                                        <!-- Dynamically generated rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Audio Gốc (M4A) -->
+                        <div class="tab-panel" id="tabOriginalAudio">
+                            <div class="table-responsive">
+                                <table class="options-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Định dạng</th>
+                                            <th>Chất lượng</th>
+                                            <th>Dung lượng</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="originalAudioFormatRows">
+                                        <!-- Dynamically generated rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download History Section -->
+        <section class="history-section hidden" id="historySection">
+            <div class="history-card">
+                <div class="history-header">
+                    <h2><i class="fa-solid fa-folder-closed"></i> Tệp tin đã tải về (<span id="historyFilesTotal">0</span>)</h2>
+                    <div class="history-actions">
+                        <button class="btn-secondary" id="btnRefreshHistory">
+                            <i class="fa-solid fa-rotate-right"></i> Làm mới
+                        </button>
+                        <button class="btn-primary-small" id="btnOpenFolderFromHistory">
+                            <i class="fa-regular fa-folder-open"></i> Mở thư mục chứa
+                        </button>
+                    </div>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- History items injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Guide & FAQ (y2mate style) -->
+        <section class="info-guide-section">
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3>Cách sử dụng đơn giản</h3>
+                    <p>Chỉ cần dán link YouTube (hoặc gõ từ khóa tìm kiếm), chọn độ phân giải video hoặc chất lượng MP3 bạn muốn và nhấn <strong>Tải về</strong>.</p>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-headphones-simple"></i></div>
+                    <h3>MP3 Chất lượng cao 320kbps</h3>
+                    <p>Hỗ trợ chuyển đổi nhạc sang MP3 với bitrate lên đến 320kbps, giữ trọn vẹn chất âm sắc nét nhất từ bản nhạc gốc của YouTube.</p>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-display"></i></div>
+                    <h3>Hỗ trợ Video 1080p Full HD & 4K</h3>
+                    <p>Tự động ghép luồng hình ảnh chất lượng cao và âm thanh tốt nhất bằng FFmpeg tích hợp, xuất file MP4 tương thích mọi thiết bị.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Download Progress Modal -->
+    <div class="modal-backdrop hidden" id="downloadModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge" id="modalFormatBadge">MP4 1080p</span>
+                    <h3 class="modal-title" id="modalVideoTitle">Đang tải xuống...</h3>
+                </div>
+                <button class="modal-close-btn" id="btnCloseModal" title="Đóng cửa sổ">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Status & Progress Visual -->
+                <div class="progress-container">
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-percentage" id="progressPercentage">0%</div>
+                </div>
+
+                <div class="status-message" id="statusMessage">
+                    <i class="fa-solid fa-circle-notch fa-spin status-spinner" id="statusSpinner"></i>
+                    <span id="statusText">Đang chuẩn bị kết nối...</span>
+                </div>
+
+                <!-- Stats details (Speed, ETA, Downloaded) -->
+                <div class="download-stats" id="downloadStats">
+                    <div class="stat-box">
+                        <span class="stat-label">Tốc độ tải</span>
+                        <span class="stat-value" id="statSpeed">0 KB/s</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Đã tải</span>
+                        <span class="stat-value" id="statDownloaded">0 B</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Thời gian còn lại</span>
+                        <span class="stat-value" id="statEta">--:--</span>
+                    </div>
+                </div>
+
+                <!-- Success Actions (shown when completed) -->
+                <div class="modal-actions hidden" id="modalActionsSuccess">
+                    <a href="#" class="btn-action-primary" id="btnBrowserDownload" download>
+                        <i class="fa-solid fa-download"></i> Lưu vào máy (Trình duyệt)
+                    </a>
+                    <button class="btn-action-secondary" id="btnOpenMediaFile">
+                        <i class="fa-solid fa-play"></i> Mở xem file ngay
+                    </button>
+                    <button class="btn-action-secondary" id="btnOpenFolderModal">
+                        <i class="fa-regular fa-folder-open"></i> Thư mục lưu file
+                    </button>
+                </div>
+
+                <!-- Error Actions (shown when failed) -->
+                <div class="modal-actions hidden" id="modalActionsError">
+                    <button class="btn-action-primary" id="btnRetryDownload">
+                        <i class="fa-solid fa-rotate-right"></i> Thử lại
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Custom JS -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
