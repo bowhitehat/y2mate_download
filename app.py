@@ -6,7 +6,7 @@ Flask Server Backend
 import os
 import sys
 import subprocess
-from flask import Flask, request, jsonify, render_template, send_file, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_file, send_from_directory, redirect
 from flask_cors import CORS
 import downloader
 from music import music
@@ -21,7 +21,13 @@ os.makedirs(downloader.DOWNLOAD_DIR, exist_ok=True)
 
 @app.route('/')
 def index():
-    """Serve the main web interface."""
+    """Open the music player by default."""
+    return redirect('/music')
+
+
+@app.route('/download')
+def download_page():
+    """Keep the video and audio downloader accessible from the music menu."""
     return render_template('index.html')
 
 

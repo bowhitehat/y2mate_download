@@ -53,8 +53,9 @@ python run.py
 
 ### Nghe nhạc và playlist
 
-Mở `http://localhost:5000/music` hoặc chọn **Nghe nhạc & Playlist** trên trang tải nhạc.
-Nếu cổng 5000 đang bận, dùng địa chỉ được in trong cửa sổ khởi động và thêm `/music`.
+Chạy `start.bat` sẽ tự mở giao diện nghe nhạc tại `http://localhost:5000/music`.
+Trang gốc `/` cũng tự chuyển sang giao diện này. Bộ tải video nằm tại `/download`, mở qua menu **Bộ tải Video**.
+Nếu cổng 5000 đang bận, dùng địa chỉ được in trong cửa sổ khởi động.
 
 - Tìm theo tên bài hát, nghệ sĩ hoặc dán liên kết video YouTube.
 - Nghe trực tiếp qua trình phát YouTube hiển thị trong ứng dụng; một số video có thể bị chủ sở hữu chặn nhúng, giới hạn khu vực hoặc yêu cầu mở trên YouTube.

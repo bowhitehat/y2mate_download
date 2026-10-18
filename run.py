@@ -37,10 +37,10 @@ def open_browser(url, delay=1.2):
 
 if __name__ == '__main__':
     port = find_available_port(5000)
-    url = f"http://localhost:{port}"
+    url = f"http://localhost:{port}/music"
 
     print("=" * 65)
-    print("  🎬 Y2Downloader - YouTube Video & MP3 Downloader (Y2Mate Local)")
+    print("  🎵 Y2Music - Nghe nhạc, playlist và tải video YouTube")
     print("=" * 65)
     print(f"  👉 Truy cập web:   {url}")
     print(f"  📁 Thư mục tải về: {os.path.abspath('downloads')}")

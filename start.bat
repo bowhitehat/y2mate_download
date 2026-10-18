@@ -1,10 +1,11 @@
 @echo off
+cd /d "%~dp0"
 chcp 65001 > nul
-title Y2Downloader - YouTube Video & Music Downloader
+title Y2Music - Music Player and Playlists
 color 0A
 
 echo =====================================================================
-echo    Y2Downloader - Cong cu tai Video va Nhac YouTube (Tuong tu Y2Mate)
+echo    Y2Music - Nghe nhac, playlist va tai video YouTube
 echo =====================================================================
 echo.
 echo Dang kiem tra moi truong Python...
