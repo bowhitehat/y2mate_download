@@ -79,3 +79,5 @@ tai_nhactuyt/
 
 - **Nếu không tải được hoặc báo lỗi mạng**: Đảm bảo máy tính có kết nối Internet bình thường.
 - **Nếu muốn cập nhật phiên bản tải YouTube**: Chạy lệnh `pip install --upgrade yt-dlp` để luôn có giải thuật giải mã mới nhất từ YouTube.
+- **Contact me: tranghoangbo92@gmail.com**
+
