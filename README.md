@@ -25,6 +25,14 @@
 
 ## 🚀 Cách khởi động và sử dụng
 
+### Cài đặt lần đầu
+
+Cài Python, mở terminal trong thư mục dự án và chạy:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
 ### Cách 1: Khởi động nhanh bằng 1 click (Khuyên dùng)
 Nhấp đúp chuột vào file:
 ```
@@ -42,6 +50,23 @@ python run.py
 ---
 
 ## 📖 Hướng dẫn sử dụng
+
+### Nghe nhạc và playlist
+
+Mở `http://localhost:5000/music` hoặc chọn **Nghe nhạc & Playlist** trên trang tải nhạc.
+Nếu cổng 5000 đang bận, dùng địa chỉ được in trong cửa sổ khởi động và thêm `/music`.
+
+- Tìm theo tên bài hát, nghệ sĩ hoặc dán liên kết video YouTube.
+- Nghe trực tiếp qua trình phát YouTube hiển thị trong ứng dụng; một số video có thể bị chủ sở hữu chặn nhúng, giới hạn khu vực hoặc yêu cầu mở trên YouTube.
+- Trong **Nhạc trên máy**, nghe các tệp âm thanh có sẵn trong `downloads/` bằng trình duyệt, hỗ trợ tua khi định dạng tương thích.
+- Tạo, đổi tên hoặc xóa playlist; thêm bài từ kết quả tìm kiếm hoặc thư viện; xóa bài và thay đổi thứ tự trong playlist.
+- Dùng thanh phát để tạm dừng, chuyển bài, chỉnh âm lượng, phát ngẫu nhiên, lặp bài hoặc lặp hàng đợi.
+- Playlist được lưu trong SQLite tại `data/music.sqlite3`, giữ lại sau khi khởi động lại. Sao lưu tệp này để giữ playlist. Dữ liệu cá nhân và nhạc đã tải không được đưa lên GitHub.
+- Hàng đợi và thiết lập trình phát được lưu riêng trong trình duyệt. Trình duyệt có thể yêu cầu bạn bấm phát trước khi cho phép phát âm thanh.
+
+Ứng dụng dùng thư viện chung trên máy, chưa có đăng nhập hoặc đồng bộ tài khoản. Khi dùng công cụ tải hiện có, chỉ tải nội dung bạn có quyền tải và tuân thủ điều khoản của nguồn cung cấp.
+
+### Tải video và âm thanh
 
 1. **Dán link hoặc tìm kiếm**:
    - Dán link YouTube bất kỳ (bấm nút **Dán** trên ô tìm kiếm).
@@ -62,15 +87,22 @@ python run.py
 tai_nhactuyt/
 ├── app.py              # Server Flask backend xử lý API
 ├── downloader.py       # Engine xử lý YouTube bằng yt-dlp & FFmpeg
+├── music.py            # API thư viện nhạc và playlist SQLite
+├── data/               # Dữ liệu playlist riêng trên máy (bỏ qua trong Git)
 ├── run.py              # Trình khởi động tự động mở trình duyệt
 ├── start.bat           # File nhấp đúp chạy trên Windows
 ├── requirements.txt    # Danh sách thư viện Python
 ├── downloads/          # Thư mục lưu trữ các file đã tải về
 ├── templates/
-│   └── index.html      # Giao diện chính của ứng dụng
+│   ├── index.html      # Giao diện chính của ứng dụng
+│   └── music.html      # Giao diện nghe nhạc và playlist
 └── static/
-    ├── css/style.css   # Giao diện hiện đại (Dark/Light mode)
-    └── js/app.js       # Logic xử lý tìm kiếm, tải, tiến trình
+    ├── css/
+    │   ├── style.css   # Giao diện trang tải nhạc
+    │   └── music.css   # Giao diện thư viện và playlist
+    └── js/
+        ├── app.js      # Tìm kiếm, tải và tiến trình tải
+        └── music.js    # Trình phát nhạc và quản lý playlist
 ```
 
 ---
@@ -81,3 +113,11 @@ tai_nhactuyt/
 - **Nếu muốn cập nhật phiên bản tải YouTube**: Chạy lệnh `pip install --upgrade yt-dlp` để luôn có giải thuật giải mã mới nhất từ YouTube.
 - **Contact me: tranghoangbo92@gmail.com**
 
+## Kiểm thử
+
+```bash
+python -m unittest discover -s tests -v
+node --test tests/music_player.test.cjs
+```
+
+Các bài kiểm thử API dùng cơ sở dữ liệu và thư mục tạm riêng, không sửa playlist hay nhạc đang có trên máy.

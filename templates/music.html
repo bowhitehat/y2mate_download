@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y2Music - Trình phát nhạc & Playlist phong cách Spotify</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Spotify-style Dark CSS -->
+    <link rel="stylesheet" href="/static/css/music.css">
+</head>
+<body class="spotify-theme">
+    <!-- App Container -->
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Brand -->
+            <div class="sidebar-brand">
+                <div class="brand-badge">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <div class="brand-meta">
+                    <span class="brand-title">Y2<span class="brand-green">Music</span></span>
+                    <span class="brand-subtitle">Trình phát nhạc & Playlist</span>
+                </div>
+            </div>
+
+            <!-- Main Navigation -->
+            <nav class="sidebar-nav">
+                <a href="#home" class="nav-item active" id="navHome" title="Trang chủ">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Trang chủ</span>
+                </a>
+                <a href="#search" class="nav-item" id="navSearch" title="Tìm kiếm">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Tìm kiếm</span>
+                </a>
+                <a href="#library" class="nav-item" id="navLibrary" title="Thư viện Offline">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>Thư viện Offline</span>
+                </a>
+                <a href="#playlists" class="nav-item" id="navPlaylists" title="Danh sách phát">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Danh sách phát</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Playlists Section (Desktop Sidebar) -->
+            <div class="sidebar-playlists-header">
+                <span class="section-title">DANH SÁCH PHÁT</span>
+                <button class="btn-create-playlist" id="btnOpenCreatePlaylistModal" title="Tạo playlist mới">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-playlists-scroll" id="sidebarPlaylistsList">
+                <!-- Dynamically rendered playlist links -->
+            </div>
+
+            <!-- Footer: Link to Downloader -->
+            <div class="sidebar-footer">
+                <a href="/" class="nav-downloader-link" title="Mở trang tải video YouTube">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <span>Bộ tải Video Y2Mate</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-viewport">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="nav-arrows">
+                        <button class="arrow-btn" id="btnHistoryBack" title="Quay lại"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="arrow-btn" id="btnHistoryForward" title="Tiếp theo"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+
+                    <!-- Topbar Search Bar (Active in Search View) -->
+                    <div class="topbar-search-wrap" id="topbarSearchWrap">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="musicSearchInput" placeholder="Tìm bài hát, ca sĩ, video YouTube..." autocomplete="off">
+                        <button class="clear-search-btn hidden" id="btnClearSearch"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <button class="topbar-btn" id="btnQuickQueue" title="Mở danh sách hàng đợi">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <span class="btn-text">Hàng đợi</span>
+                        <span class="badge-count" id="queueBadgeCount">0</span>
+                    </button>
+                    <button class="topbar-btn btn-highlight" id="btnTopCreatePlaylist" title="Tạo Playlist mới">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="btn-text">Tạo Playlist</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Views -->
+            <div class="views-container">
+                <!-- VIEW 1: HOME (Khám phá) -->
+                <section class="view-panel active" id="viewHome">
+                    <div class="hero-banner">
+                        <div class="hero-content">
+                            <span class="hero-tag">Trải nghiệm âm nhạc không giới hạn</span>
+                            <h1 class="hero-title">Chào mừng bạn đến với Y2Music</h1>
+                            <p class="hero-desc">Tìm kiếm bất kỳ bản nhạc nào trên YouTube, thưởng thức bài hát đã tải về máy và quản lý danh sách phát tiện lợi như Spotify.</p>
+                            <div class="hero-buttons">
+                                <button class="btn-hero-primary" id="btnHeroGoSearch">
+                                    <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm bài hát
+                                </button>
+                                <button class="btn-hero-secondary" id="btnHeroGoLibrary">
+                                    <i class="fa-solid fa-folder-open"></i> Mở Thư viện Offline
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Shortcuts Cards -->
+                    <div class="section-block">
+                        <h2 class="block-title">Lối tắt nhanh</h2>
+                        <div class="shortcuts-grid">
+                            <div class="shortcut-card" id="cardLikedSongs">
+                                <div class="shortcut-icon icon-heart"><i class="fa-solid fa-heart"></i></div>
+                                <div class="shortcut-info">
+                                    <span class="shortcut-name">Bài hát đã thích</span>
+                                    <span class="shortcut-sub" id="likedSongsCount">0 bài hát</span>
+                                </div>
+                                <button class="shortcut-play-btn" id="btnPlayLikedPlaylist"><i class="fa-solid fa-play"></i></button>
+                            </div>
+
+                            <div class="shortcut-card" id="cardOfflineMusic">
+                                <div class="shortcut-icon icon-local"><i class="fa-solid fa-hard-drive"></i></div>
+                                <div class="shortcut-info">
+                                    <span class="shortcut-name">Kho nhạc máy tính</span>
+                                    <span class="shortcut-sub" id="localFilesCount">Đang tải...</span>
+                                </div>
+                                <button class="shortcut-play-btn" id="btnPlayAllLocal"><i class="fa-solid fa-play"></i></button>
+                            </div>
+
+                            <div class="shortcut-card" id="cardSearchShortcut">
+                                <div class="shortcut-icon icon-yt"><i class="fa-brands fa-youtube"></i></div>
+                                <div class="shortcut-info">
+                                    <span class="shortcut-name">YouTube Music</span>
+                                    <span class="shortcut-sub">Khám phá hàng triệu video âm nhạc</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Playlists Overview -->
+                    <div class="section-block">
+                        <div class="block-header">
+                            <h2 class="block-title">Playlist của bạn</h2>
+                            <button class="btn-primary-sm" id="btnHomeCreatePlaylist">
+                                <i class="fa-solid fa-plus"></i> Tạo Playlist
+                            </button>
+                        </div>
+                        <div class="playlist-cards-grid" id="homePlaylistsGrid">
+                            <!-- Populated with playlist cards -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: SEARCH -->
+                <section class="view-panel" id="viewSearch">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Tìm kiếm âm nhạc</h1>
+                            <p class="view-subtitle">Nhập tên ca sĩ, bài hát hoặc từ khóa để tìm trên YouTube và kho nhạc offline.</p>
+                        </div>
+                    </div>
+
+                    <!-- Search Status States -->
+                    <div class="status-box hidden" id="searchLoadingState">
+                        <div class="spinner-green"></div>
+                        <p>Đang tìm kiếm bài hát...</p>
+                    </div>
+
+                    <div class="status-box hidden" id="searchEmptyState">
+                        <i class="fa-solid fa-compact-disc status-icon"></i>
+                        <p id="searchEmptyMessage">Nhập từ khóa vào ô tìm kiếm ở trên để bắt đầu.</p>
+                    </div>
+
+                    <div class="status-box status-error hidden" id="searchErrorState">
+                        <i class="fa-solid fa-triangle-exclamation status-icon"></i>
+                        <p id="searchErrorMessage">Lỗi khi tìm kiếm. Vui lòng thử lại sau.</p>
+                        <button class="btn-secondary-sm" id="btnRetrySearch">Thử lại</button>
+                    </div>
+
+                    <!-- Search Results Table -->
+                    <div class="track-table-container hidden" id="searchResultsContainer">
+                        <table class="track-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-num">#</th>
+                                    <th class="col-title">Tiêu đề bài hát</th>
+                                    <th class="col-source">Nguồn</th>
+                                    <th class="col-time"><i class="fa-regular fa-clock"></i></th>
+                                    <th class="col-actions">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchResultsTableBody">
+                                <!-- Search rows injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: LIBRARY (Offline / Downloaded files) -->
+                <section class="view-panel" id="viewLibrary">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Thư viện nhạc Offline</h1>
+                            <p class="view-subtitle">Các bài hát MP3/M4A đã tải về thư mục máy tính của bạn.</p>
+                        </div>
+                        <div class="view-actions">
+                            <button class="btn-secondary" id="btnRefreshLibrary">
+                                <i class="fa-solid fa-rotate-right"></i> Làm mới
+                            </button>
+                            <button class="btn-primary" id="btnPlayAllLibrary">
+                                <i class="fa-solid fa-play"></i> Phát tất cả
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Library Status -->
+                    <div class="status-box hidden" id="libraryLoadingState">
+                        <div class="spinner-green"></div>
+                        <p>Đang quét các file nhạc trong máy...</p>
+                    </div>
+
+                    <div class="status-box hidden" id="libraryEmptyState">
+                        <i class="fa-solid fa-folder-open status-icon"></i>
+                        <p>Chưa có file nhạc nào trong thư mục tải về.</p>
+                        <a href="/" class="btn-secondary-sm" style="margin-top: 10px; text-decoration: none;">
+                            <i class="fa-solid fa-download"></i> Sang trang Tải nhạc YouTube
+                        </a>
+                    </div>
+
+                    <!-- Library Table -->
+                    <div class="track-table-container" id="libraryContainer">
+                        <table class="track-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-num">#</th>
+                                    <th class="col-title">Tên tệp / Bài hát</th>
+                                    <th class="col-source">Nguồn</th>
+                                    <th class="col-time"><i class="fa-regular fa-clock"></i></th>
+                                    <th class="col-actions">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="libraryTableBody">
+                                <!-- Local tracks rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: ALL PLAYLISTS (For mobile & direct navigation) -->
+                <section class="view-panel" id="viewPlaylistsList">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Danh sách phát của bạn</h1>
+                            <p class="view-subtitle">Quản lý và nghe các playlist bạn đã tạo.</p>
+                        </div>
+                        <div class="view-actions">
+                            <button class="btn-primary" id="btnPlaylistsListCreate">
+                                <i class="fa-solid fa-plus"></i> Tạo Playlist
+                            </button>
+                        </div>
+                    </div>
+                    <div class="playlist-cards-grid" id="allPlaylistsGrid">
+                        <!-- Populated with playlist cards -->
+                    </div>
+                </section>
+
+                <!-- VIEW 5: PLAYLIST DETAILS -->
+                <section class="view-panel" id="viewPlaylist">
+                    <!-- Playlist Banner -->
+                    <div class="playlist-banner">
+                        <div class="playlist-banner-cover" id="playlistBannerCover">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div class="playlist-banner-details">
+                            <span class="playlist-type-tag">DANH SÁCH PHÁT</span>
+                            <h1 class="playlist-banner-title" id="playlistBannerTitle">Tên Playlist</h1>
+                            <div class="playlist-banner-meta">
+                                <span id="playlistBannerCreator">Người dùng</span> •
+                                <span id="playlistBannerTrackCount">0 bài hát</span> •
+                                <span id="playlistBannerDuration">0 phút</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Playlist Controls Bar -->
+                    <div class="playlist-controls-bar">
+                        <button class="btn-play-hero" id="btnPlaylistPlayAll" title="Phát playlist">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <button class="btn-icon-circle" id="btnPlaylistShuffle" title="Phát ngẫu nhiên">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </button>
+                        <button class="btn-icon-circle" id="btnPlaylistRename" title="Đổi tên playlist">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-icon-circle btn-danger-hover" id="btnPlaylistDelete" title="Xóa playlist này">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </div>
+
+                    <!-- Playlist Tracks Table -->
+                    <div class="track-table-container" id="playlistTracksContainer">
+                        <table class="track-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-num">#</th>
+                                    <th class="col-title">Tiêu đề bài hát</th>
+                                    <th class="col-source">Nguồn</th>
+                                    <th class="col-time"><i class="fa-regular fa-clock"></i></th>
+                                    <th class="col-order">Thứ tự</th>
+                                    <th class="col-actions">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="playlistTracksTableBody">
+                                <!-- Playlist tracks rows -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="status-box hidden" id="playlistEmptyState">
+                        <i class="fa-solid fa-music status-icon"></i>
+                        <p>Playlist này chưa có bài hát nào.</p>
+                        <button class="btn-secondary-sm" id="btnPlaylistFindSongs">Tìm kiếm bài hát để thêm vào</button>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: QUEUE (Hàng đợi phát nhạc) -->
+                <section class="view-panel" id="viewQueue">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Hàng đợi phát nhạc</h1>
+                            <p class="view-subtitle">Danh sách các bài hát sẽ được phát tiếp theo.</p>
+                        </div>
+                        <div class="view-actions">
+                            <button class="btn-secondary" id="btnClearQueue">
+                                <i class="fa-regular fa-trash-can"></i> Xóa hàng đợi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="now-playing-block" id="queueNowPlayingBlock">
+                        <span class="block-subtitle">ĐANG PHÁT</span>
+                        <div class="now-playing-card" id="queueNowPlayingCard">
+                            <!-- Currently playing card injected -->
+                        </div>
+                    </div>
+
+                    <div class="next-up-block">
+                        <span class="block-subtitle">TIẾP THEO TRONG HÀNG ĐỢI</span>
+                        <div class="track-table-container" id="queueContainer">
+                            <table class="track-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-num">#</th>
+                                        <th class="col-title">Tiêu đề bài hát</th>
+                                        <th class="col-source">Nguồn</th>
+                                        <th class="col-time"><i class="fa-regular fa-clock"></i></th>
+                                        <th class="col-actions">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="queueTableBody">
+                                    <!-- Queue rows injected -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="status-box hidden" id="queueEmptyState">
+                            <p>Hàng đợi tiếp theo đang trống.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- YouTube Video Dock (>= 200x200 mandatory requirement) -->
+        <div class="video-dock" id="videoDock">
+            <div class="video-dock-header">
+                <div class="video-dock-title">
+                    <i class="fa-brands fa-youtube video-dock-yt-icon"></i>
+                    <span id="videoDockTitleText">YouTube Video Player</span>
+                </div>
+                <div class="video-dock-actions">
+                    <button class="dock-btn" id="btnExpandVideoDock" title="Phóng to / Thu nhỏ">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center" id="iconExpandDock"></i>
+                    </button>
+                    <button class="dock-btn" id="btnCloseVideoDock" title="Đóng màn hình video (sẽ tạm dừng video)">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Player Frame Container (strictly >= 200x200 px) -->
+            <div class="video-dock-frame-container" id="videoDockFrameContainer">
+                <!-- YouTube IFrame API Target Element -->
+                <div id="ytPlayer"></div>
+
+                <!-- Error Overlay (Shown if video embed blocked or error occurs) -->
+                <div class="dock-overlay dock-error hidden" id="ytErrorOverlay">
+                    <i class="fa-solid fa-triangle-exclamation dock-alert-icon"></i>
+                    <p class="dock-alert-text" id="ytErrorMessage">Video này chặn phát nhúng trên trang ngoài.</p>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn-yt-external" id="btnOpenOnYouTube">
+                        <i class="fa-brands fa-youtube"></i> Mở xem trên YouTube
+                    </a>
+                </div>
+
+                <!-- Autoplay Interrupted Overlay -->
+                <div class="dock-overlay dock-autoplay hidden" id="ytAutoplayOverlay">
+                    <i class="fa-solid fa-circle-play dock-alert-icon"></i>
+                    <p class="dock-alert-text">Trình duyệt yêu cầu tương tác để phát tiếp bài hát.</p>
+                    <button class="btn-primary-sm" id="btnResumeAutoplay">
+                        <i class="fa-solid fa-play"></i> Bấm để phát tiếp
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Player Bar (Persistent, Spotify style) -->
+        <footer class="bottom-player-bar" id="bottomPlayerBar">
+            <!-- Left: Current Track Info -->
+            <div class="player-left">
+                <div class="player-thumb-wrap">
+                    <img src="" alt="" id="playerTrackThumb" class="hidden">
+                    <div class="player-thumb-placeholder" id="playerThumbPlaceholder">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                </div>
+                <div class="player-meta">
+                    <div class="player-title" id="playerTrackTitle">Chưa chọn bài hát</div>
+                    <div class="player-artist" id="playerTrackArtist">Sẵn sàng phát nhạc</div>
+                </div>
+                <div class="player-left-actions">
+                    <button class="player-icon-btn" id="btnPlayerLike" title="Thích bài hát này">
+                        <i class="fa-regular fa-heart" id="iconPlayerLike"></i>
+                    </button>
+                    <button class="player-icon-btn" id="btnPlayerAddToPlaylist" title="Thêm vào Playlist">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Center: Player Controls & Progress -->
+            <div class="player-center">
+                <div class="player-controls">
+                    <button class="control-btn" id="btnShuffle" title="Phát ngẫu nhiên (Shuffle)">
+                        <i class="fa-solid fa-shuffle"></i>
+                    </button>
+                    <button class="control-btn" id="btnPrev" title="Bài trước (Previous)">
+                        <i class="fa-solid fa-backward-step"></i>
+                    </button>
+                    <button class="play-btn" id="btnPlayPause" title="Phát / Tạm dừng">
+                        <i class="fa-solid fa-play" id="iconPlayPause"></i>
+                    </button>
+                    <button class="control-btn" id="btnNext" title="Bài tiếp theo (Next)">
+                        <i class="fa-solid fa-forward-step"></i>
+                    </button>
+                    <button class="control-btn" id="btnRepeat" title="Lặp lại: Tắt">
+                        <i class="fa-solid fa-repeat"></i>
+                        <span class="repeat-one-badge hidden" id="repeatOneBadge">1</span>
+                    </button>
+                </div>
+
+                <div class="player-progress-bar-wrap">
+                    <span class="time-label" id="playerCurrentTime">0:00</span>
+                    <div class="progress-bar-container" id="playerProgressBarContainer">
+                        <div class="progress-bar-rail">
+                            <div class="progress-bar-fill" id="playerProgressBarFill" style="width: 0%;"></div>
+                        </div>
+                        <input type="range" class="progress-range-input" id="playerSeekInput" min="0" max="100" value="0" step="0.1">
+                    </div>
+                    <span class="time-label" id="playerTotalTime">0:00</span>
+                </div>
+            </div>
+
+            <!-- Right: Secondary Controls (Dock, Queue, Volume) -->
+            <div class="player-right">
+                <button class="player-icon-btn" id="btnToggleVideoDock" title="Bật/Tắt màn hình video YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </button>
+                <button class="player-icon-btn" id="btnToggleQueue" title="Mở danh sách hàng đợi">
+                    <i class="fa-solid fa-list-ul"></i>
+                </button>
+                <div class="volume-control-wrap">
+                    <button class="player-icon-btn" id="btnVolumeMute" title="Bật/Tắt âm thanh">
+                        <i class="fa-solid fa-volume-high" id="iconVolume"></i>
+                    </button>
+                    <div class="volume-slider-container">
+                        <div class="volume-rail">
+                            <div class="volume-fill" id="playerVolumeFill" style="width: 80%;"></div>
+                        </div>
+                        <input type="range" class="volume-range-input" id="playerVolumeInput" min="0" max="100" value="80" step="1">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Hidden HTML5 Audio Element for Local Tracks -->
+    <audio id="localAudioPlayer" preload="auto"></audio>
+
+    <!-- Modal: Create Playlist -->
+    <div class="modal-overlay hidden" id="modalCreatePlaylist">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Tạo danh sách phát mới</h3>
+                <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <label for="inputPlaylistName" class="modal-label">Tên playlist</label>
+                <input type="text" id="inputPlaylistName" class="modal-input" placeholder="Ví dụ: Nhạc chill làm việc, Nhạc ballad..." maxlength="80">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" data-close-modal>Hủy</button>
+                <button class="btn-modal-confirm" id="btnConfirmCreatePlaylist">Tạo mới</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Rename Playlist -->
+    <div class="modal-overlay hidden" id="modalRenamePlaylist">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Đổi tên danh sách phát</h3>
+                <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <label for="inputRenamePlaylistName" class="modal-label">Tên playlist mới</label>
+                <input type="text" id="inputRenamePlaylistName" class="modal-input" placeholder="Nhập tên mới..." maxlength="80">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" data-close-modal>Hủy</button>
+                <button class="btn-modal-confirm" id="btnConfirmRenamePlaylist">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Track to Playlist -->
+    <div class="modal-overlay hidden" id="modalAddToPlaylist">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Thêm vào Playlist</h3>
+                <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="target-track-preview" id="modalTargetTrackPreview">
+                    <!-- Preview of track being added -->
+                </div>
+                <div class="modal-playlists-list" id="modalPlaylistsList">
+                    <!-- Selectable playlist items -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" data-close-modal>Đóng</button>
+                <button class="btn-modal-confirm" id="btnModalCreateNewPlaylist">
+                    <i class="fa-solid fa-plus"></i> Tạo playlist mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-stack" id="toastContainer"></div>
+
+    <!-- YouTube IFrame API Script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- Music JS Engine -->
+    <script src="/static/js/music.js"></script>
+</body>
+</html>

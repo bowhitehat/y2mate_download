@@ -1,5 +1,7 @@
 # Downloaded media
 /downloads/
+/data/
+/.antigravity-music-handoff.txt
 
 # Python cache and virtual environments
 __pycache__/

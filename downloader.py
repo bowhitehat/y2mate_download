@@ -94,6 +94,9 @@ def is_url(text):
 def search_youtube(query, max_results=10):
     """Search YouTube for videos matching query."""
     ydl_opts = {
+        'socket_timeout': 15,
+        'retries': 1,
+        'extractor_retries': 1,
         'quiet': True,
         'extract_flat': True,
         'skip_download': True,
