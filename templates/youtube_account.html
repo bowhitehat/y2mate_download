@@ -1,0 +1,63 @@
+<section class="view-panel" id="viewYouTube">
+    <div class="view-header">
+        <div><span class="yt-eyebrow">THƯ VIỆN CỦA BẠN</span>
+            <h1 class="view-title">YouTube của tôi</h1>
+            <p class="view-subtitle">Kết nối tài khoản để nghe những playlist có sẵn trên YouTube.</p></div>
+    </div>
+    <div class="yt-account-card">
+        <div class="yt-account-avatar"><i class="fa-brands fa-youtube" aria-hidden="true"></i></div>
+        <div class="yt-account-info"><h2 id="ytAccountTitle">Đang kiểm tra kết nối…</h2>
+            <p id="ytAccountDescription">Playlist cá nhân, ngay trong thư viện của bạn.</p></div>
+        <div class="yt-account-actions">
+            <button class="btn-primary" id="ytConnect" disabled>Kết nối Google</button>
+            <button class="btn-secondary-sm hidden" id="ytRefresh">Làm mới playlist</button>
+            <button class="btn-secondary-sm hidden" id="ytDisconnect">Ngắt kết nối</button>
+        </div>
+    </div>
+    <p class="yt-feedback hidden" id="ytFeedback" role="status" aria-live="polite"></p>
+    <details class="yt-setup" id="ytSetup">
+        <summary>Thiết lập Google lần đầu <span id="ytSetupBadge">Cần file OAuth JSON</span></summary>
+        <div class="yt-setup-content">
+            <p>Chỉ cần thiết lập một lần cho bản chạy trên máy. Y2Music xin quyền <strong>chỉ đọc YouTube</strong>; bạn đăng nhập và cấp quyền trên trang Google.</p>
+            <ol>
+                <li><strong>Bật API.</strong> Tạo hoặc chọn một dự án trong
+                    <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener noreferrer">Google Cloud → YouTube Data API v3</a>, rồi chọn <strong>Enable</strong>.</li>
+                <li><strong>Thiết lập ứng dụng.</strong> Vào
+                    <a href="https://console.cloud.google.com/auth/overview" target="_blank" rel="noopener noreferrer">Google Auth Platform</a>.
+                    Điền tên ứng dụng và email hỗ trợ trong <strong>Branding</strong>. Ở <strong>Audience</strong>, chọn <strong>External</strong>, giữ chế độ <strong>Testing</strong> và thêm email Google của bạn vào <strong>Test users</strong>.
+                    Trong <strong>Data Access</strong>, thêm quyền <code>https://www.googleapis.com/auth/youtube.readonly</code>.</li>
+                <li><strong>Tạo OAuth Client.</strong> Vào <strong>Clients → Create client → Desktop app</strong>, đặt tên Y2Music và tải file JSON về máy. API key và file loại Web application không dùng cho bước này.</li>
+                <li><strong>Chọn file bên dưới</strong>, sau đó bấm <strong>Kết nối Google</strong>. Nếu có nhiều kênh, chọn đúng kênh chứa playlist của bạn.</li>
+            </ol>
+            <label class="yt-file-button" for="ytClientFile"><i class="fa-solid fa-file-import" aria-hidden="true"></i> Chọn file OAuth Client JSON</label>
+            <input id="ytClientFile" type="file" accept=".json,application/json" class="yt-file-input">
+            <p class="yt-setup-note">File cấu hình và phiên kết nối lưu trong thư mục data/ trên máy, được bỏ qua khi đẩy GitHub. Trên Windows, thông tin kết nối được mã hóa theo tài khoản Windows của bạn.</p>
+            <p class="yt-setup-note">Nếu Google báo <strong>access_denied</strong>, kiểm tra đúng email trong Test users. Nếu chưa lấy được playlist, kiểm tra API đã bật và đúng kênh YouTube. Ứng dụng đang Testing có thể yêu cầu kết nối lại sau khi phiên hết hạn.</p>
+        </div>
+    </details>
+    <div id="ytConnectedLibrary" class="hidden">
+        <div class="yt-library-heading"><h2>Playlist trên YouTube</h2><span class="yt-readonly">Chỉ đọc tài khoản</span></div>
+        <p class="yt-library-note">Hiển thị playlist do kênh của bạn tạo và video đã thích. Với playlist của người khác bạn đã lưu, có thể mở bằng liên kết bên dưới. Xem sau, lịch sử và một số mix riêng của YouTube Music không được API hỗ trợ.</p>
+        <form class="yt-lookup" id="ytLookupForm">
+            <label class="yt-visually-hidden" for="ytPlaylistUrl">Liên kết playlist YouTube hoặc YouTube Music</label>
+            <input id="ytPlaylistUrl" type="url" placeholder="Dán link playlist YouTube / YouTube Music…" required>
+            <button class="btn-secondary-sm" type="submit">Mở playlist</button>
+        </form>
+        <p id="ytPlaylistsLoading" class="yt-state hidden" role="status">Đang tải playlist từ YouTube…</p>
+        <p id="ytPlaylistsEmpty" class="yt-state hidden">Kênh này chưa có playlist. Bạn có thể tạo playlist trên YouTube hoặc mở playlist bằng liên kết.</p>
+        <div class="playlist-cards-grid" id="ytPlaylistsGrid"></div>
+        <button class="btn-secondary-sm yt-more hidden" id="ytMorePlaylists">Xem thêm playlist</button>
+        <div id="ytSelectedPlaylist" class="yt-selected hidden">
+            <div class="yt-selected-header"><div><span class="yt-eyebrow">PLAYLIST YOUTUBE</span><h2 id="ytSelectedTitle"></h2>
+                <p id="ytTracksCount"></p></div>
+                <button class="btn-primary" id="ytPlayPlaylist" disabled><i class="fa-solid fa-play" aria-hidden="true"></i> Phát các bài đang hiển thị</button></div>
+            <p id="ytTracksLoading" class="yt-state hidden" role="status">Đang tải bài hát…</p>
+            <p id="ytTracksEmpty" class="yt-state hidden">Playlist đang trống hoặc chưa có video có thể phát.</p>
+            <div class="track-table-container"><table class="track-table"><thead><tr>
+                <th class="col-num">#</th><th>Tiêu đề bài hát</th><th class="col-source">Nguồn</th>
+                <th class="col-time">Thời lượng</th><th class="col-actions">Thêm</th>
+            </tr></thead><tbody id="ytTracksBody"></tbody></table></div>
+            <button class="btn-secondary-sm yt-more hidden" id="ytMoreTracks">Tải thêm bài trong playlist</button>
+        </div>
+    </div>
+</section>

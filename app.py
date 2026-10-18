@@ -4,16 +4,20 @@ Flask Server Backend
 """
 
 import os
+import logging
 import sys
 import subprocess
 from flask import Flask, request, jsonify, render_template, send_file, send_from_directory, redirect
 from flask_cors import CORS
 import downloader
 from music import music
+from youtube_account import youtube_account, RedactOAuthCallback
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 CORS(app)
 app.register_blueprint(music)
+app.register_blueprint(youtube_account)
+logging.getLogger('werkzeug').addFilter(RedactOAuthCallback())
 
 # Ensure downloads directory exists
 os.makedirs(downloader.DOWNLOAD_DIR, exist_ok=True)

@@ -1,0 +1,23 @@
+.yt-eyebrow{display:block;color:#f87171;font-size:11px;font-weight:800;letter-spacing:1.4px;margin-bottom:10px}
+.yt-account-card{display:flex;align-items:center;gap:18px;padding:24px;border:1px solid #383838;border-radius:16px;background:linear-gradient(115deg,#35191c,#1c1c1c 65%);margin:20px 0}
+.yt-account-avatar{width:60px;height:60px;flex-shrink:0;background:#cf2535;color:white;display:grid;place-items:center;border-radius:16px;font-size:28px}
+.yt-account-info{flex:1;min-width:0}.yt-account-info h2{font-size:18px;margin:0 0 6px;overflow-wrap:anywhere}.yt-account-info p{color:#aaa;font-size:13px;line-height:1.5}
+.yt-account-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}.yt-account-actions button:disabled{opacity:.5;cursor:wait}
+.yt-feedback{padding:14px 18px;background:#352321;border:1px solid #714440;color:#ffd5ce;border-radius:10px;line-height:1.6;font-size:14px;margin:16px 0;overflow-wrap:anywhere}
+.yt-feedback.is-success{background:#153323;border-color:#246b3e;color:#b4f2ca}
+.yt-setup{border:1px solid #363636;border-radius:14px;background:#1b1b1b;margin:20px 0 28px}
+.yt-setup summary{cursor:pointer;padding:18px;font-weight:700;font-size:14px}.yt-setup summary span{font-size:11px;color:#aaa;margin-left:10px;font-weight:400}
+.yt-setup-content{padding:0 22px 22px;color:#bbb;font-size:14px;line-height:1.8}.yt-setup-content ol{padding-left:22px;margin:18px 0}.yt-setup-content li{padding:6px 0 10px}
+.yt-setup-content strong{color:#eee}.yt-setup-content a{color:#8cdba6;text-decoration:underline;text-underline-offset:3px}.yt-setup-content code{font-size:11px;overflow-wrap:anywhere;color:#b2dabd}
+.yt-file-button{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;background:#eee;color:#111;border-radius:25px;font-weight:700;cursor:pointer}
+.yt-file-input{display:block;width:100%;margin-top:12px;font-size:12px;color:#999}.yt-setup-content .yt-setup-note{font-size:12px;color:#999;margin:14px 0 0}
+.yt-library-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 8px}.yt-library-heading h2{font-size:22px}.yt-readonly{color:#8bcfa4;font-size:11px;padding:5px 10px;border:1px solid #315d40;border-radius:20px;white-space:nowrap}
+.yt-library-note{font-size:13px;line-height:1.7;color:#aaa;margin-bottom:18px}.yt-lookup{display:flex;gap:10px;margin:18px 0 24px}.yt-lookup input{flex:1;min-width:0;background:#242424;border:1px solid #444;border-radius:8px;padding:12px;color:white;font:inherit;font-size:13px}
+.yt-state{padding:24px 0;color:#aaa;font-size:14px}.yt-more{display:block;margin:20px auto}.yt-selected{border-top:1px solid #363636;padding-top:28px;margin-top:32px}
+.yt-selected-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:20px}.yt-selected-header h2{font-size:25px;overflow-wrap:anywhere}.yt-selected-header p{font-size:12px;color:#aaa;margin-top:8px}
+.yt-selected-header button{flex-shrink:0}.yt-selected button:disabled{opacity:.5;cursor:default}
+.yt-remote-cover{width:100%;aspect-ratio:16/10;object-fit:cover;background:#262626;border-radius:8px;margin-bottom:12px;display:grid;place-items:center;font-size:32px;color:#e66868}
+.yt-remote-title{font-size:15px;font-weight:700;line-height:1.4;overflow-wrap:anywhere}.yt-remote-meta{font-size:12px;color:#999;margin-top:8px}.yt-playlist-card{border:1px solid transparent;text-align:left;color:#eee;font:inherit;transition:border-color .15s}.yt-playlist-card:hover,.yt-playlist-card:focus-visible{border-color:#d45b65;outline:none}
+.yt-visually-hidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:900px){.yt-account-card{flex-wrap:wrap}.yt-account-actions{width:100%;justify-content:flex-start}}
+@media(max-width:650px){.yt-account-card{padding:16px;gap:12px}.yt-account-avatar{width:44px;height:44px;font-size:22px}.yt-account-info h2{font-size:16px}.yt-account-info p{font-size:12px}.yt-setup summary span{display:block;margin:8px 0 0}.yt-setup-content{padding:0 14px 18px;font-size:13px}.yt-file-button{font-size:12px;padding:10px 12px}.yt-lookup{flex-direction:column}.yt-selected-header{flex-direction:column;align-items:flex-start}.yt-selected-header h2{font-size:22px}.yt-selected-header button{font-size:12px}.yt-library-heading{align-items:flex-start}.yt-library-heading h2{font-size:20px}}

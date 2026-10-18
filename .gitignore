@@ -15,6 +15,10 @@ env/
 .env
 .env.*
 !.env.example
+client_secret*.json
+client_secrets*.json
+credentials.json
+token.json
 
 # Editor and operating system files
 .vscode/

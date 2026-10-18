@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Spotify-style Dark CSS -->
     <link rel="stylesheet" href="/static/css/music.css">
+    <link rel="stylesheet" href="/static/css/youtube-account.css">
 </head>
 <body class="spotify-theme">
     <!-- App Container -->
@@ -46,6 +47,10 @@
                 <a href="#playlists" class="nav-item" id="navPlaylists" title="Danh sách phát">
                     <i class="fa-solid fa-layer-group"></i>
                     <span>Danh sách phát</span>
+                </a>
+                <a href="#youtube" class="nav-item" id="navYouTube" title="Tài khoản và playlist YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                    <span>YouTube của tôi</span>
                 </a>
             </nav>
 
@@ -281,6 +286,8 @@
                         <!-- Populated with playlist cards -->
                     </div>
                 </section>
+
+                {% include 'youtube_account.html' %}
 
                 <!-- VIEW 5: PLAYLIST DETAILS -->
                 <section class="view-panel" id="viewPlaylist">
@@ -578,8 +585,9 @@
     <div class="toast-stack" id="toastContainer"></div>
 
     <!-- YouTube IFrame API Script -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api" async></script>
     <!-- Music JS Engine -->
     <script src="/static/js/music.js"></script>
+    <script src="/static/js/youtube-account.js"></script>
 </body>
 </html>

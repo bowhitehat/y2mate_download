@@ -53,6 +53,8 @@
         el.navSearch = document.getElementById('navSearch');
         el.navLibrary = document.getElementById('navLibrary');
         el.navPlaylists = document.getElementById('navPlaylists');
+        el.navYouTube = document.getElementById('navYouTube');
+        el.viewYouTube = document.getElementById('viewYouTube');
         el.sidebarPlaylistsList = document.getElementById('sidebarPlaylistsList');
         el.btnOpenCreatePlaylistModal = document.getElementById('btnOpenCreatePlaylistModal');
         el.btnTopCreatePlaylist = document.getElementById('btnTopCreatePlaylist');
@@ -827,6 +829,9 @@
     // ==========================================
     function switchView(viewName, addToHistory = true) {
         state.activeView = viewName;
+        el.navYouTube.classList.toggle('active', viewName === 'youtube');
+        el.viewYouTube.classList.toggle('active', viewName === 'youtube');
+        if (viewName === 'youtube') document.dispatchEvent(new Event('y2music:youtube-open'));
 
         // Reset nav links
         el.navHome.classList.toggle('active', viewName === 'home');
@@ -1696,6 +1701,10 @@
     // Event Listeners Binding
     // ==========================================
     function bindEvents() {
+        el.navYouTube.addEventListener('click', event => {
+            event.preventDefault();
+            switchView('youtube');
+        });
         // Navigation clicks
         el.navHome.addEventListener('click', (e) => { e.preventDefault(); switchView('home'); });
         el.navSearch.addEventListener('click', (e) => { e.preventDefault(); switchView('search'); });
@@ -1948,6 +1957,12 @@
         if (window.YT?.Player) window.onYouTubeIframeAPIReady();
         bindEvents();
         setupSearch();
+        window.Y2Music = {
+            openYouTube: () => switchView('youtube'),
+            playTracks: setQueueAndPlay,
+            createTrackRow: createTrackTableRow,
+            showToast,
+        };
 
         updateVolumeUI();
         updateRepeatUI();

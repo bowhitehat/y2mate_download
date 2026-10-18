@@ -67,6 +67,24 @@ Nếu cổng 5000 đang bận, dùng địa chỉ được in trong cửa sổ k
 
 Ứng dụng dùng thư viện chung trên máy, chưa có đăng nhập hoặc đồng bộ tài khoản. Khi dùng công cụ tải hiện có, chỉ tải nội dung bạn có quyền tải và tuân thủ điều khoản của nguồn cung cấp.
 
+### Kết nối tài khoản YouTube
+
+Trong menu **YouTube của tôi**, mở **Thiết lập Google lần đầu** và làm theo hướng dẫn có sẵn:
+
+1. Tạo/chọn một dự án trong [Google Cloud](https://console.cloud.google.com/apis/library/youtube.googleapis.com) và bật **YouTube Data API v3**.
+2. Mở **Google Auth Platform**: điền Branding; ở Audience chọn External/Testing và thêm email của bạn vào Test users; thêm scope `https://www.googleapis.com/auth/youtube.readonly` trong Data Access.
+3. Vào **Clients → Create client → Desktop app**, rồi tải file OAuth Client JSON. Không dùng API key hoặc file Web application.
+4. Chọn file JSON trong Y2Music, bấm **Kết nối Google** và tự đăng nhập/cấp quyền trên trang Google bằng trình duyệt thông thường như Brave hoặc Chrome.
+5. Xem playlist của kênh đã chọn, mở playlist và bấm phát. Với danh sách dài, dùng nút **Xem thêm playlist** hoặc **Tải thêm bài trong playlist**. Nút phát chỉ phát những bài đang được hiển thị.
+
+Tính năng dùng [OAuth cho desktop](https://developers.google.com/identity/protocols/oauth2/native-app) với PKCE và quyền chỉ đọc. Không cần nhập mật khẩu Google vào Y2Music. Google Cloud phải được thiết lập trước khi có thể đăng nhập; kiểm thử tự động dùng phản hồi Google giả lập, không thay thế kiểm tra với tài khoản thực.
+
+Theo [YouTube Data API](https://developers.google.com/youtube/data/reference/rest/v3/playlists/list), danh sách tự động gồm playlist do kênh của bạn sở hữu; Y2Music cũng hiển thị video đã thích khi API cung cấp. Playlist của người khác bạn đã lưu có thể mở bằng liên kết nếu tài khoản có quyền xem. Xem sau, lịch sử, mix và một số nội dung riêng của YouTube Music không được API hỗ trợ đầy đủ. Video riêng tư hoặc chặn nhúng có thể cần mở trực tiếp trên YouTube.
+
+Thông tin tài khoản nằm trong `data/youtube.sqlite3`, được bỏ qua trong Git. Trên Windows, cấu hình và token được mã hóa bằng DPAPI theo tài khoản Windows; không sao chép cơ sở dữ liệu này sang máy/tài khoản Windows khác để dùng phiên đăng nhập. Trên hệ POSIX, tệp dùng quyền truy cập `0600`. Không đăng file OAuth JSON hay token lên GitHub hoặc gửi qua chat. Dùng nút **Ngắt kết nối** để xóa phiên trên máy và yêu cầu Google thu hồi quyền; có thể xem quyền ứng dụng tại [Tài khoản Google](https://myaccount.google.com/connections).
+
+Mỗi bản chạy trên máy dùng chung một tài khoản YouTube đã kết nối; đây chưa phải hệ thống nhiều người dùng. Chỉ các yêu cầu từ máy local và đúng trang ứng dụng được truy cập API tài khoản. Playlist gốc trên YouTube không bị chỉnh sửa.
+
 ### Tải video và âm thanh
 
 1. **Dán link hoặc tìm kiếm**:
